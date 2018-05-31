@@ -46,7 +46,25 @@ sudo timedatactl
 timedatactl list-timezones
 //设置当前时区
 
+-----loginctl-----查看当前登录的用户
+//列出当前session
+sudo loginctl list-sessions
+//列出当前登录用户
+sudo loginctl list-users
+//列出指定用户的信息
+sudo loginctl show-user rui
 
+-----Unit----- Systemd可以管理所有系统资源,不同的资源统称为Unit
+unit分为12种
+	Service unit:系统服务
+	Target unit:多个unit构成的一个组
+	Device unit:硬件设备
+	Mount unit:文件系统的挂载点
+	Automount unit:自动挂载点
+	Path unit:文件或路径
+	Scope unit:不是由systemd启动的外部进程
+	Slicce unit:进程组
+	
 
 
 
