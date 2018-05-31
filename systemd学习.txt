@@ -1,0 +1,56 @@
+教程地址:
+http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html
+
+------systemctl命令-----systemd的主命令用于管理系统
+//重启系统
+sudo systemctl reboot
+//关闭系统，切断电源
+sudo systemctl poweroff
+//CPU停止工作
+sudo systemctl halt
+//暂停系统
+systemd学习
+
+sudo systemctl suspend
+//让系统进入冬眠状态
+sudo systemctl hibernate
+//让系统进入交互式休眠状态
+sudo systemctl hybrid-sleep
+//启动进入救援状态
+sudo systemctl rescue
+
+------system-analyze命令-----查看系统启动耗时
+//查看每个服务的启动耗时
+sudo systemd-analyze blame
+//显示瀑布状的启动过程流
+sudo systemd-analyze critical-chain
+//显示指定服务的启动流
+sudo systemd-analyze critical-chain atd.service
+
+-----hostnamectl命令-----用于查看当前主机的信息
+//显示当前主机的信息
+sudo hostnamectl 
+//设置主机名
+sudo hostnamectl set-hostname rui
+
+-----localectl-----查看本地化设置
+//查看本地化设置localectl
+localectl
+//设置本地化参数
+sudo localectl set-locale LANG=en_GB.utf8
+
+-----timedatectl------用于查看当前时区设置
+//查看当前时区设置
+sudo timedatactl
+//显示所有可用的时区
+timedatactl list-timezones
+//设置当前时区
+
+
+
+
+
+
+
+
+
