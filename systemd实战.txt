@@ -1,0 +1,72 @@
+1.开机启动
+	对于支持systemd的软件,安装的时候,会自动在/usr/lib/systemd/systemd目录添加一个配置文件
+	上面的命令相当于在/etc/systemd/system目录添加一个符号链接，指向/usr/lib/systemd/system里面的httpd.service文件。
+	这是因为开机时，Systemd只执行/etc/systemd/system目录里面的配置文件。这也意味着，如果把修改后的配置文件放在该目录，就可以达到覆盖原始配置的效果。
+	
+2.启动服务
+设置开机启动以后，软件并不会立即启动，必须等到下一次开机。如果想现在就运行该软件，那么要执行systemctl start命令。
+sudo systemctl start httpd
+执行上面的命令以后，有可能启动失败，因此要用systemctl status命令查看一下该服务的状态。
+
+3.停止服务
+终止正在运行的服务，需要执行systemctl stop命令
+sudo systemctl stop httpd.service
+
+有时候，该命令可能没有响应，服务停不下来。这时候就不得不"杀进程"了，向正在运行的进程发出kill信号。
+sudo systemctl kill httpd.service
+
+此外，重启服务要执行systemctl restart命令。
+sudo systemctl restart httpd.service
+
+4.配置文件
+一个服务怎么启动，完全由它的配置文件决定。下面就来看，配置文件有些什么内容。
+前面说过，配置文件主要放在/usr/lib/systemd/system目录，也可能在/etc/systemd/system目录。
+找到配置文件以后，使用文本编辑器打开即可。
+
+systemctl cat sshd.service
+[Unit]
+Description=OpenSSH server daemon
+Documentation=man:sshd(8) man:sshd_config(5)
+After=network.target sshd-keygen.service
+Wants=sshd-keygen.service
+
+[Service]
+EnvironmentFile=/etc/sysconfig/sshd
+ExecStart=/usr/sbin/sshd -D $OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+Type=simple
+KillMode=process
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target
+
+[Unit] 区块：启动顺序与依赖关系。
+Unit区块的Description字段给出当前服务的简单描述，Documentation字段给出文档位置。
+接下来的设置是启动顺序和依赖关系，这个比较重要。
+After字段：表示如果network.target或sshd-keygen.service需要启动，那么sshd.service应该在它们之后启动。
+相应地，还有一个Before字段，定义sshd.service应该在哪些服务之前启动。
+注意，After和Before字段只涉及启动顺序，不涉及依赖关系。
+举例来说，某 Web 应用需要 postgresql 数据库储存数据。在配置文件中，它只定义要在 postgresql 之后启动，而没有定义依赖 postgresql。
+上线后，由于某种原因，postgresql 需要重新启动，在停止服务期间，该 Web 应用就会无法建立数据库连接。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
